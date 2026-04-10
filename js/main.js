@@ -1,7 +1,7 @@
 console.log('MAIN JS CARREGADO - V8 PUBLISH READY');
 
 const MODEL_FILE_PATH = './assets/models/bolsa.glb';
-const USE_LOCAL_HDR = false;
+const USE_LOCAL_HDR = true;
 const LOCAL_HDR_PATH = './assets/hdr/glasshouse_interior_4k_blur_exp_sat.hdr';
 const AR_EXPERIENCE_URL = new URL('./ar-view.html', window.location.href).href;
 
