@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AR Product Preview</title>
+  <meta name="description" content="Mobile AR product preview using model-viewer." />
+
+  <script
+    type="module"
+    src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
+  ></script>
+
+  <style>
+    :root {
+      --bg: #f3f3ef;
+      --card: #ffffff;
+      --text: #1e1e1c;
+      --muted: #66665e;
+      --accent: #dce6a0;
+      --border: #dfdfd8;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      padding: 16px 18px;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+    .subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .shell {
+      width: 100%;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1;
+    }
+    .viewer-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    }
+    model-viewer {
+      width: 100%;
+      height: 68vh;
+      min-height: 460px;
+      background: var(--bg);
+      --poster-color: transparent;
+      display: block;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 12px 16px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+    .note {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+    .note strong {
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topbar">
+      <div>
+        <div class="title">AR Product Preview</div>
+        <div class="subtitle">Open this page on a phone or tablet to launch AR.</div>
+      </div>
+    </div>
+
+    <div class="shell">
+      <div class="viewer-card">
+        <model-viewer
+          id="ar-viewer"
+          src="./assets/models/relogio.glb"
+          ios-src="./assets/models/relogio.usdz"
+          alt="AR product preview"
+          ar
+          ar-modes="webxr scene-viewer quick-look"
+          camera-controls
+          shadow-intensity="1"
+          shadow-softness="0.8"
+          exposure="1.1"
+          environment-image="neutral"
+          interaction-prompt="none"
+          camera-orbit="0deg 75deg auto"
+          field-of-view="28deg"
+          loading="eager"
+          reveal="auto">
+          <button class="btn btn-primary" slot="ar-button" id="launch-ar-btn">
+            View in AR
+          </button>
+        </model-viewer>
+      </div>
+
+      <div class="controls">
+        <button class="btn" id="reset-camera-btn" type="button">Reset Camera</button>
+        <button class="btn" id="toggle-rotate-btn" type="button">Enable Rotation</button>
+      </div>
+
+      <div class="note">
+        <strong>Important:</strong> Android AR uses WebXR or Scene Viewer on supported devices.
+        iPhone and iPad use Quick Look and need the file <code>assets/models/relogio.usdz</code>.
+        If you only add the GLB, desktop 3D will work, but iPhone/iPad AR will not.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const viewer = document.getElementById('ar-viewer');
+    const resetBtn = document.getElementById('reset-camera-btn');
+    const rotateBtn = document.getElementById('toggle-rotate-btn');
+
+    let rotateOn = false;
+    const INITIAL_CAMERA_ORBIT = '0deg 75deg auto';
+    const INITIAL_FIELD_OF_VIEW = '28deg';
+
+    resetBtn.addEventListener('click', () => {
+      viewer.cameraOrbit = INITIAL_CAMERA_ORBIT;
+      viewer.fieldOfView = INITIAL_FIELD_OF_VIEW;
+    });
+
+    rotateBtn.addEventListener('click', () => {
+      rotateOn = !rotateOn;
+      if (rotateOn) {
+        viewer.setAttribute('auto-rotate', '');
+        rotateBtn.textContent = 'Pause Rotation';
+      } else {
+        viewer.removeAttribute('auto-rotate');
+        rotateBtn.textContent = 'Enable Rotation';
+      }
+    });
+  </script>
+</body>
+</html>
