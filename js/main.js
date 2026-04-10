@@ -7,10 +7,10 @@ const AR_EXPERIENCE_URL = new URL('./ar-view.html', window.location.href).href;
 
 const INITIAL_CAMERA_ORBIT = '0deg 75deg auto';
 const INITIAL_FIELD_OF_VIEW = '28deg';
-const INITIAL_EXPOSURE = '2';
+const INITIAL_EXPOSURE = '4';
 
 const LEGACY_EFFECTS = {
-  enabled: true,
+  enabled: false,
   preset: 'subtle',
 };
 
